@@ -155,7 +155,7 @@ class Archiver():
         else:
             print("volume already mounted:")
         print("Starting tar archive")
-        command = "sudo tar cvzf /home/ubuntu/sdb.tar.gz /opt"
+        command = "sudo tar cvzf /home/ubuntu/sdb.tar.gz /mnt"
         if run_ssh_command_return_code(self.ip,command) == 0:
             return True
         else:
