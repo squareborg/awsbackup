@@ -29,7 +29,7 @@ def run_ssh_command_return_code(public_ip,command):
 
 def scp(target_ip, source_path, destination_path):
     print('SCP - ip {0} source_path {1} dest_path {2}'.format(target_ip,source_path,destination_path))
-    scp = subprocess.Popen(["scp", "-i", key_file, '{0}@{1}:{2}'.format(user, target_ip, source_path), '{0}'.format(destination_path)],
+    scp = subprocess.Popen(["scp", "-i", key_file, "-o", "StrictHostKeyChecking=no", '{0}@{1}:{2}'.format(user, target_ip, source_path), '{0}'.format(destination_path)],
                            shell=False,
                            stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
