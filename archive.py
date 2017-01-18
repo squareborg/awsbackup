@@ -115,7 +115,7 @@ class Archiver():
             )
             if res[0].id:
                 self.instance_id = res[0].id
-                print('Created Archiver: {0}, waiting for instance checks ok'.format(res[0].id))
+                print('Created Archiver: {0}, waiting for instance checks, this could take a few minutes'.format(res[0].id))
                 ec2c = boto3.client('ec2', region_name=settings.REGION)
                 instance_running = ec2c.get_waiter('instance_status_ok')
                 instance_running.wait(InstanceIds=[res[0].id])

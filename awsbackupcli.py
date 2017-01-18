@@ -5,7 +5,36 @@ from datetime import datetime, timedelta
 from myaws import AwsInstance, AwsVolume, AwsSnapshot
 from archive import Archive, Archiver, ArchiveStorage
 import settings
+import os
 
+# Do some checks
+
+if os.path.isdir(settings.STORAGE_PATH):
+    try:
+        testfilepath = os.path.join(settings.STORAGE_PATH, '.awsbackuptestfile')
+        with open(testfilepath,'w') as testfile:
+            testfile.write("testing")
+    except PermissionError as err:
+        print('Critical not sufficent privileges to write into storage location {0}'.format(err))
+        exit()
+    else:
+        os.unlink(testfilepath)
+else:
+    print('Critical: Cannot find storage path {0}'.format(settings.STORAGE_PATH))
+    exit()
+
+
+key_file = settings.SSH_KEY_FILE
+if os.path.isfile(key_file):
+    key_file_statinfo = os.stat(key_file)
+    if oct(key_file_statinfo.st_mode & 0o0777) == '0o600':
+        # todo check if key is a valid key, then check it works
+        pass
+    else:
+        print('Critical: ssh key {0} does not have correct permissions Require mode 600'.format(key_file))
+else:
+    print('Critical: Cannot find ssh key {0}'.format(key_file))
+    exit()
 
 frequency = timedelta(settings.FREQUENCY)
 
