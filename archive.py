@@ -1,6 +1,7 @@
 import boto3
 import os
 import re
+import time
 import settings
 from datetime import datetime
 from remoteops import run_ssh_command_return_code, scp
@@ -153,7 +154,12 @@ class Archiver():
             print("Volume not mounted, mounting...")
             self.mount_volume()
         else:
-            print("volume already mounted:")
+            print("volume already mounted: fixing")
+            # we have incorrect label
+            run_ssh_command_return_code(self.ip,'sudo e2label /dev/xvdf1 old/;sudo reboot')
+            print("rebooting and waiting 60s")
+            # wait 60 seconds to reboot
+            time.sleep(60)
         print("Starting tar archive")
         command = "sudo tar cvzf /home/ubuntu/sdf.tar.gz /mnt"
         if run_ssh_command_return_code(self.ip,command) == 0:
