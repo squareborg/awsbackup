@@ -160,6 +160,12 @@ class Archiver():
             print("rebooting and waiting 60s")
             # wait 60 seconds to reboot
             time.sleep(60)
+            if not self.volume_mounted():
+                print("Volume not mounted, mounting...")
+                self.mount_volume()
+            else:
+                print('Critical - Volume still mounted exiting.')
+                exit()
         print("Starting tar archive")
         command = "sudo tar cvzf /home/ubuntu/sdf.tar.gz /mnt"
         if run_ssh_command_return_code(self.ip,command) == 0:
