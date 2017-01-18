@@ -156,7 +156,7 @@ class Archiver():
         else:
             print("volume already mounted: fixing")
             # we have incorrect label
-            run_ssh_command_return_code('sudo e2label /dev/xvda1 cloudimg-rootfs')
+            run_ssh_command_return_code(self.ip,'sudo e2label /dev/xvda1 cloudimg-rootfs')
             run_ssh_command_return_code(self.ip,'sudo e2label /dev/xvdf1 old/;sudo reboot')
             print("rebooting and waiting 60s")
             # wait 60 seconds to reboot
