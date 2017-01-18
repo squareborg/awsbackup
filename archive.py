@@ -94,7 +94,7 @@ class Archiver():
                 {
                     'DeviceName': '/dev/sda1',
                     'Ebs': {
-                        'SnapshotId': 'snap-04996ed4fc6de4761' # Ubuntu
+                        'SnapshotId': settings.ARCHIVER_AMI_SNAPSHOT # Ubuntu
                     }
                 },
                 {
