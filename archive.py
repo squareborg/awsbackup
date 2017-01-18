@@ -156,7 +156,7 @@ class Archiver():
         else:
             print("volume already mounted: fixing")
             # we have incorrect label or same UUID
-            run_ssh_command_return_code(self.ip,'sudo e2label /dev/xvdf1 old/;sudo reboot;sudo e2label /dev/xvda1 cloudimg-rootfs;sudo tune2fs - O ^uninit_bg /dev/xvdf1;sudo tune2fs /dev/xvdf1 -U random;sudo tune2fs -O +uninit_bg /dev/xvdf1;sudo reboot ')
+            run_ssh_command_return_code(self.ip,'sudo e2label /dev/xvdf1 old/;sudo e2label /dev/xvda1 cloudimg-rootfs;sudo tune2fs - O ^uninit_bg /dev/xvdf1;sudo tune2fs /dev/xvdf1 -U random;sudo tune2fs -O +uninit_bg /dev/xvdf1;sudo reboot ')
             print("rebooting and waiting 60s")
             # wait 60 seconds to reboot
             time.sleep(60)
