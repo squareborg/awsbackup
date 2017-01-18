@@ -128,7 +128,7 @@ class Archiver():
             return False
 
     def destroy(self):
-        ec2 = boto3.resource('ec2', region_name='eu-west-1')
+        ec2 = boto3.resource('ec2', region_name=settings.REGION)
         ec2.instances.filter(InstanceIds=[self.instance_id]).terminate()
 
     def volume_mounted(self):
