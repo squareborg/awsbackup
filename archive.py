@@ -98,7 +98,7 @@ class Archiver():
                     }
                 },
                 {
-                    'DeviceName': '/dev/sdb',
+                    'DeviceName': '/dev/sdf',
                     'Ebs': {
                         'SnapshotId': self.target_snapshot.snapshot_id
                     }
@@ -132,14 +132,14 @@ class Archiver():
         ec2.instances.filter(InstanceIds=[self.instance_id]).terminate()
 
     def volume_mounted(self):
-        if run_ssh_command_return_code(self.ip,'mount | grep xvdb1') == 0:
+        if run_ssh_command_return_code(self.ip,'mount | grep xvdf1') == 0:
             return True
         else:
             return False
 
 
     def mount_volume(self):
-        command = 'sudo mount /dev/xvdb1 /mnt'
+        command = 'sudo mount /dev/xvdf1 /mnt'
         if (run_ssh_command_return_code(self.ip,command)) == 0:
             print("mount command success")
             return True
@@ -155,7 +155,7 @@ class Archiver():
         else:
             print("volume already mounted:")
         print("Starting tar archive")
-        command = "sudo tar cvzf /home/ubuntu/sdb.tar.gz /mnt"
+        command = "sudo tar cvzf /home/ubuntu/sdf.tar.gz /mnt"
         if run_ssh_command_return_code(self.ip,command) == 0:
             return True
         else:
@@ -169,7 +169,7 @@ class Archiver():
         this_archive.instance_id = self.target_instance
         this_archive.snapshot_id = self.target_snapshot
         this_archive.snapshot_start_time = self.target_snapshot.start_time
-        return scp(self.ip,'/home/ubuntu/sdb.tar.gz',os.path.join(this_archive_storage.path,this_archive.get_name()))
+        return scp(self.ip,'/home/ubuntu/sdf.tar.gz',os.path.join(this_archive_storage.path,this_archive.get_name()))
 
 
     def run_archive(self):
