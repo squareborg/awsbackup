@@ -1,12 +1,25 @@
-Backup AWS instance volumes to local tar.gz
-==========================================
+Backup AWS instance volumes to local tar.gz for offsite backup
+==============================================================
 
 ***WARNING***
 
-Developement software, not fit for purpose.
+Developement software, not fit for purpose. Use at own risk
 
 ***END OF WARNING***
 
-This is the very alpha start of a bigger project. This at the moment will conect to AWS, query all instances tagged with key:value  backup:1, then check to see if its due to backup that instance. If it is, it creates a temporary instance, with the latest snapshot of your target instance as a secondary mounted volume. It then tar.gz that volume and then downloads it locally for keeping offsite.
+# What it does right now
+
+You set a frequency of backups in `settings.py` value is in days at the moment eg. `FREQUENCY = 7 `
+
+1) Finds all instances tagged with key:value  `backup:1`
+2) Checks if the target instance is due a backup, by checking when the last backup was done and seeing if its greater than settings.FREQUENCY
+3) Create a temporary instance (Archiver) to perform archiving task
+4) Mounts the latest snapshot of the target instance into the Archive at /mnt
+5) runs tar cvzf /home/ubuntu/sdb.tar.gz /mnt
+6) SCP's the tar.gz back to local machine and stores it
+7) Terminates the temporary Archiver instance
+8) Moves on to next instance
+
+
 
 
