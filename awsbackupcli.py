@@ -32,6 +32,7 @@ if os.path.isfile(key_file):
         pass
     else:
         print('Critical: ssh key {0} does not have correct permissions Require mode 600'.format(key_file))
+        exit()
 else:
     print('Critical: Cannot find ssh key {0}'.format(key_file))
     exit()

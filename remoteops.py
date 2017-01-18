@@ -10,7 +10,6 @@ def run_ssh_command(public_ip,command):
                            stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     res = ssh.communicate()
-    print(res)
     if ssh.returncode > 0:
         print("Error below")
         print(res[1])
@@ -23,7 +22,6 @@ def run_ssh_command_return_code(public_ip,command):
                            stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     res = ssh.communicate()
-    print(res)
     if ssh.returncode > 0:
         print("Error below")
         print(res[1])
@@ -36,7 +34,6 @@ def scp(target_ip, source_path, destination_path):
                            stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     res = scp.communicate()
-    print(res)
     if scp.returncode == 0:
         return True
     else:
