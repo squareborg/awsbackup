@@ -4,6 +4,8 @@ import settings
 key_file = settings.SSH_KEY_FILE
 user = 'ubuntu'
 
+#Disable host key checking.
+
 def run_ssh_command(public_ip,command):
     ssh = subprocess.Popen(["ssh","-o","StrictHostKeyChecking=no", "-i", key_file, '{0}@{1}'.format(user,public_ip), command],
                            shell=False,
