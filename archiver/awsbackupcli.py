@@ -37,6 +37,10 @@ else:
     print('Critical: Cannot find ssh key {0}'.format(key_file))
     exit()
 
+if not os.getenv('AWS_ACCESS_KEY_ID') or not os.getenv('AWS_SECRET_ACCESS_KEY'):
+    print('Critical: Cannot find credentials, is AWS_ACCESS_KEY_ID or AWS_SECRET_ACCESS_KEY not set?')
+    exit()
+
 frequency = timedelta(settings.FREQUENCY)
 
 archive_storage = ArchiveStorage()
@@ -44,6 +48,14 @@ archive_storage.path = settings.STORAGE_PATH
 archive_storage.initialise()
 
 ec2 = boto3.resource('ec2',region_name=settings.REGION)
+
+# Delete any old archivers
+
+filters = [{'Name':'tag:hypersrvbackuparchiver', 'Values':['True']}]
+archiver_instances = ec2.instances.filter(Filters=filters)
+for archiver_instance in archiver_instances:
+    print('Found old archiver {0}, terminating...'.format(archiver_instance.id))
+    archiver_instance.terminate()
 
 my_instances = []
 filters = [{'Name':'tag:backup', 'Values':['1']}]
@@ -88,11 +100,14 @@ for instance in my_instances:
         run = True
     if (run):
         print('Instance {0} is due for archiving'.format(instance.instance_id))
-        archiver = Archiver()
-        archiver.target_instance = instance
-        archiver.create()
-        if archiver.run_archive():
-            print('Successfully backed up {0}'.format(instance.instance_id))
+        if len(instance.volumes[0].snapshots) > 0:
+            archiver = Archiver()
+            archiver.target_instance = instance
+            archiver.create()
+            if archiver.run_archive():
+                print('Successfully backed up {0}'.format(instance.instance_id))
+            else:
+                print('eek something went wrong with archiving {0}'.format(instance.instance_id))
+            archiver.destroy()
         else:
-            print('eek something went wrong with archiving {0}'.format(instance.instance_id))
-        archiver.destroy()
+            print('No snapshots available, skipping')
