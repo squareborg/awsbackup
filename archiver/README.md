@@ -66,6 +66,6 @@ Now setup a cronjob like this again updating the paths to what you have
 	crontab -e
 
 	# m h  dom mon dow   command
-	* * * * * ps aux | grep "python3 /home/ubuntu/awsbackup/awsbackupcli.py" | grep -v grep ||  /home/ubuntu/awsbackup/backup_oregon.sh
+	0 */12 * * * ps aux | grep "python3 /home/ubuntu/awsbackup/awsbackupcli.py" | grep -v grep ||  /home/ubuntu/awsbackup/backup_oregon.sh
 
 Now it will keep checking to see if it needs to pull down an image
